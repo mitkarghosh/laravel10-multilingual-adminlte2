@@ -1,1 +1,3 @@
 https://laracasts.com/discuss/channels/laravel/class-interventionimageimageserviceprovider-not-found
+
+https://www.positronx.io/laravel-image-resize-upload-with-intervention-image-package/
