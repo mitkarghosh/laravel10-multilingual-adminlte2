@@ -1,0 +1,18 @@
+﻿Publishable key:
+pk_test_51GygeyH2e89LEoDsGTmB7beUL92VO8T8VD2SEddup9J6J0LLJe8LYBYijz9fUmy1DoCdpPuF1gWxAZvu8hUocQ5N00hOtxtSNy
+
+Secret key:
+sk_test_51GygeyH2e89LEoDsnN1QgFTrZMz6fOp2yoliHyErf89dd1IbvzkZr6ouJZJBmAvpyvlMykEZW788xjlbkH4zWq9A00X94Paxur
+
+CLient Account::
+==============
+
+Publishable key:
+pk_test_51H5HGZDeqMHuXiU0VsDEd0jOaO0WHZ1ILkqBZbr72t0FvtUr3Me76SownvRU0uW73J2scLq7UpyH8cywvYP9icLs00XNptWKTU
+
+Secret key:
+sk_test_51H5HGZDeqMHuXiU07X6kvE4CgGJo4cZoo5y8Kn5BKTJyLKGvrmqGuv2OtluTKXPqxC7nePowX4d8PPB36Sns7BqP00XyfAFjQP
+
+
+INSERT INTO `sb_cms` (`id`, `name`, `slug`, `meta_keyword`, `meta_description`, `page_banner`, `updated_by`, `created_at`, `updated_at`) VALUES (NULL, 'Reservation', 'reservation', 'Schiff Binningen', 'Schiff Binningen', NULL, '1', '2021-02-26 03:00:00', '2021-02-26 02:00:00');
+INSERT INTO `sb_cms_locals` (`id`, `page_id`, `lang_code`, `title`, `description`) VALUES (NULL, '10', 'EN', 'Reservation', NULL), (NULL, '10', 'DE', 'Reservation', NULL);

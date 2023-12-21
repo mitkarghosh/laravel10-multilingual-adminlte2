@@ -1,0 +1,296 @@
+@extends('site.layouts.app', [])
+	@section('content')
+	  
+		<section class="common_banner">
+			<div class="bannerbox">
+				<figure class="bannerimg">
+					<img src="{{asset('images/site/sample/banner.jpg')}}" alt="Banner">
+				</figure>
+			</div>
+		</section>
+
+		@include('site.elements.tab_menu')
+	
+		<section class="section">
+			<div class="container">
+			@if($categoryList->count() > 0)
+				<aside class="tt_sidebar sidebar_left stickySidebar">
+					<h2 class="heading">@lang('custom.lab_categories')</h2>
+					<nav class="side_list">
+						<ul>
+					@foreach ($categoryList as $item)
+						@if ($item->products->count() > 0)
+							<li><a href="#{{$item->slug}}">{{$item->local[0]->local_title}}</a></li>
+						@endif
+					@endforeach
+						</ul>
+					</nav>
+				</aside>
+
+				<article class="tt_container stickyContent">
+					@include('site.elements.notification')
+					
+					<div class="alert alert-info withIcon">
+						<i class="fa fa-exclamation"></i>
+						<a href="javascript:void(0);" data-toggle="tt_modal" data-target="#allergy_modal">@lang('custom.text_allergen')</a>
+					</div>
+
+				@foreach ($categoryList as $item)
+					@if ($item->products->count() > 0)
+						<div class="item_group" id="{{$item->slug}}">
+							<i class="icon-arrow-down item_arrow"></i>
+							<h2 class="heading">
+						@if ($item->image != null)
+							@if (file_exists(public_path('/uploads/category/'.$item->image)))
+								<figure style="background-image: url({{ asset('uploads/category/'.$item->image) }});"></figure>
+							@endif
+						@endif
+								<span>{{$item->local[0]->local_title}}</span>
+							</h2>
+
+							<div class="item_details">
+						@foreach ($item->products as $keyProduct => $valProduct)
+							@if ($valProduct->status == '1')
+								<div class="tt_box item_box">
+									<div class="tt-image-content @if ($valProduct->image != null)has-img @endif">
+										<div class="tt-cntnt">
+											<h3 class="subheading">{{$valProduct->local[0]->local_title}}</h3>
+										@if ($valProduct->productTags->count() > 0)
+											<ul class="item_tag">
+											@foreach($valProduct->productTags as $keyTag => $valTag)
+												@php
+												$tagImage = '';
+												if ($valTag->tagDetails->image != null) {
+													if(file_exists(public_path('/uploads/tag'.'/'.$valTag->tagDetails->image))) {
+														$tagImage = \URL::asset('uploads/tag').'/'.$valTag->tagDetails->image;
+													}
+												}
+												@endphp
+												<li>
+													<span>
+													@if ($tagImage != '')
+														<i class="siteicon" style="background-image: url({{$tagImage}});"></i>
+													@endif
+														{{$valTag->tagDetails->local[0]->local_title}}
+													</span>
+												</li>
+											@endforeach
+											</ul>
+										@endif
+										@if ($valProduct->local[0]->local_description)
+											<div class="mb20">{!!$valProduct->local[0]->local_description!!}</div>
+										@endif
+										</div>
+										<div class="tt-cntntR">
+										@if ($valProduct->image != null)
+							                @if (file_exists(public_path('/uploads/product/thumbs/'.$valProduct->image)))
+												<a href="{{ asset('/uploads/product/'.$valProduct->image) }}" data-lightbox="image-{{$valProduct->id}}" data-title="{{$valProduct->local[0]->local_title}}" class="tt-light-img">
+													<figure class="tt-img" style="background-image:url({{ asset('/uploads/product/thumbs/'.$valProduct->image) }})"></figure>
+												</a>
+							                @endif
+							            @endif
+											<div class="tt_qty">
+												<input type="text" name="qty" value="1" class="tt_qtyInput" id="tt_qtyInput_{{$valProduct->id}}" data-prodid="{{$valProduct->id}}">
+												<a href="javascript: void(0);" class="tt_qtyMinus" data-prodid="{{$valProduct->id}}">-</a>
+												<a href="javascript: void(0);" class="tt_qtyAdd" data-prodid="{{$valProduct->id}}">+</a>
+											</div>
+										</div>
+									</div>
+							@if ($valProduct->has_attribute == 'Y')
+								@if ($valProduct->productAttributes->count() > 0)
+									<ul class="price_list">
+									@foreach($valProduct->productAttributes as $keyAttributes => $valAttributes)
+										<li>
+											<a href="javascript: void(0);" class="add_to_basket" id="anchor_prod_id_{{$valProduct->id}}" data-productid="{{Helper::customEncryptionDecryption($valProduct->id)}}" data-prodid="{{$valProduct->id}}" data-showingredients="" data-attributeid="{{Helper::customEncryptionDecryption($valAttributes->id)}}" data-hasattribute="Y" data-drinkid="" data-specialid="" data-proprice="{{$valProduct->price}}">
+												<div class="tt_fleft">{{$valAttributes->local[0]->local_title}}</div>
+												<div class="tt_fright"><span class="blue">CHF <span id="updated_prod_id_{{$valProduct->id}}">{{Helper::formatToTwoDecimalPlaces($valAttributes->price)}}</span> <i class="plus">+</i></span></div>
+											</a>
+										</li>
+									@endforeach
+									</ul>
+								@endif
+							@endif
+
+							@if ($valProduct->has_attribute == 'N')
+								@if ($valProduct->show_ingredients == 'N')
+									@if ($valProduct->is_menu == 'N')
+										<ul class="price_list">
+											<li>
+												<a href="javascript: void(0);" class="add_to_basket" id="anchor_prod_id_{{$valProduct->id}}" data-productid="{{Helper::customEncryptionDecryption($valProduct->id)}}" data-prodid="{{$valProduct->id}}" data-showingredients="" data-attributeid="" data-hasattribute="" data-drinkid="" data-specialid="" data-proprice="{{$valProduct->price}}">
+													<div class="tt_fleft"><span class="blue">@lang('custom.add_to_basket')</span></div>
+													<div class="tt_fright"><span class="blue">CHF <span id="updated_prod_id_{{$valProduct->id}}">{{Helper::formatToTwoDecimalPlaces($valProduct->price)}}</span> <i class="plus">+</i></span></div>
+												</a>
+											</li>
+										</ul>
+										<input type="hidden" id="first_time_pro_price_{{$valProduct->id}}" value="{{Helper::formatToTwoDecimalPlaces($valProduct->price)}}">
+									@elseif ($valProduct->is_menu == 'Y')
+										@php $singleDropDownPrice = 0; @endphp
+										<div class="meal_opt">
+											@foreach ($valProduct->productMenuTitles as $menuTitle)
+												@if ($menuTitle->is_multiple == 'N')				
+												<label class="labelWrap">
+													<span>{{$menuTitle->local[0]->local_title}}</span>
+													<select name="dropdown_menu_value" id="dropdown_menu_value" class="singleDropDown dropdown_menu_value_{{$valProduct->id}}" autocomplete="off" data-prodid="{{$valProduct->id}}">
+														{{-- <option value="">@lang('custom.please_select_optional')</option> --}}
+													@foreach ($menuTitle->menuValues as $keuMenuValue => $valMenuValue)
+														@php if ($keuMenuValue == 0) {$singleDropDownPrice += $valMenuValue->price;} @endphp
+														<option value="{{$valMenuValue->id.'|'.$menuTitle->id}}" data-ddprice="{{$valMenuValue->price}}">{{$valMenuValue->local[0]->local_title}} @if ($valMenuValue->price > 0)(+ {{Helper::formatToTwoDecimalPlaces($valMenuValue->price)}} CHF) @endif</option>
+													@endforeach
+													</select>
+												</label>
+												@else
+												{{-- Multiple section - newly implemented --}}
+												<div class="div_select" id="multiple_drop_down_{{$valProduct->id}}">
+													<span>{{$menuTitle->local[0]->local_title}}</span>
+													<ul class="price_list" id="price_list_{{$valProduct->id}}">
+														@foreach ($menuTitle->menuValues as $keuMenuValue => $valMenuValue)
+														<li>
+															<label class="input_check">
+																<input type="checkbox" name="" id="" class="multipleDropDown dropdown_menu_value_multiple_{{$valProduct->id}}" value="{{$valMenuValue->id.'|'.$menuTitle->id}}" data-ddprice="{{$valMenuValue->price}}" data-prodid="{{$valProduct->id}}">
+																<span>
+																	<span class="tt_fleft">
+																	@if (isset($valMenuValue->local[0]))
+																		{{$valMenuValue->local[0]->local_title}} @endif 				@if ($valMenuValue->price > 0)(+ {{Helper::formatToTwoDecimalPlaces($valMenuValue->price)}} CHF) @endif
+																	</span>
+																</span>
+															</label>
+														</li>
+													@endforeach
+													</ul>
+												</div>
+												@endif
+											@endforeach
+										</div>
+
+										<ul class="price_list">
+											<li>
+												<a href="javascript: void(0);" class="add_to_basket" id="anchor_prod_id_{{$valProduct->id}}" data-productid="{{Helper::customEncryptionDecryption($valProduct->id)}}" data-prodid="{{$valProduct->id}}" data-showingredients="" data-attributeid="" data-hasattribute="" data-drinkid="" data-specialid="" data-ismenu="Y" data-proprice="{{$valProduct->price}}">
+													<div class="tt_fleft"><span class="blue">@lang('custom.add_to_basket')</span></div>
+													<div class="tt_fright"><span class="blue">CHF <span id="updated_prod_id_{{$valProduct->id}}">{{Helper::formatToTwoDecimalPlaces($valProduct->price + $singleDropDownPrice)}}</span> <i class="plus">+</i></span></div>
+												</a>
+											</li>
+										</ul>
+										<input type="hidden" id="first_time_pro_price_{{$valProduct->id}}" value="{{Helper::formatToTwoDecimalPlaces($valProduct->price + $singleDropDownPrice)}}">
+									@endif
+								@else
+									<div class="div_select" id="multiple_drop_down_{{$valProduct->id}}">
+										<span>@lang('custom.please_select_optional')</span>
+										<ul class="price_list" id="price_list_{{$valProduct->id}}">
+										@foreach ($ingredientList as $keyIngredient => $valIngredient)
+											<li>
+												<label class="input_check">
+													<input type="checkbox" name="ingredients[{{$valProduct->id}}][]" id="" class="ingredients ingredients_checkbox_{{$valProduct->id}}" value="{{Helper::customEncryptionDecryption($valIngredient->id)}}" data-productid="{{Helper::customEncryptionDecryption($valProduct->id)}}" data-ingredientid="{{$valIngredient->id}}" data-proid="{{$valProduct->id}}">
+													<span>
+														<span class="tt_fleft">{{$valIngredient->local[0]->local_title}}</span>
+														<span class="tt_fright blue">+ CHF {{Helper::formatToTwoDecimalPlaces($valIngredient->price)}}</span>
+													</span>
+												</label>
+											</li>
+										@endforeach
+										</ul>
+									</div>
+										
+									<ul class="price_list">
+										<li>
+											<a href="javascript: void(0);" class="add_to_basket" data-productid="{{Helper::customEncryptionDecryption($valProduct->id)}}" data-prodid="{{$valProduct->id}}" data-showingredients="Yes" data-attributeid="" data-hasattribute="" data-drinkid="" data-specialid="">
+												<div class="tt_fleft"><span class="blue">@lang('custom.add_to_basket')</span></div>
+												<div class="tt_fright"><span class="blue">@lang('custom.total') CHF <span id="product_without_attribute_ingredient_price_{{$valProduct->id}}">{{Helper::formatToTwoDecimalPlaces($valProduct->price)}}</span> <i class="plus">+</i></span></div>
+											</a>
+										</li>
+									</ul>
+
+									<input type="hidden" name="" id="product_previous_price_{{$valProduct->id}}" class="" value="{{Helper::formatToTwoDecimalPlaces($valProduct->price)}}">
+
+									<input type="hidden" name="" id="product_without_attribute_price_{{$valProduct->id}}" class="product_without_attribute_price" value="0">
+
+									<input type="hidden" name="" id="product_without_attribute_ingredient_ids_{{$valProduct->id}}" class="product_without_attribute_ingredient_ids" value="">
+								@endif
+							@endif
+
+								</div>
+							@endif
+						@endforeach
+							</div>
+						</div>
+					@endif
+				@endforeach						
+				</article>
+
+				<aside class="tt_sidebar sidebar_right stickySidebar">
+					@include('site.elements.cart_right_panel')
+
+				@if ($drinkList->count() > 0)
+					{{-- Drinks section --}}
+					<div class="order_box" id="drinks_items" style="display: none;">
+						<h2 class="subheading">@lang('custom.text_drink')</h2>
+						<ul class="price_list">
+						@foreach ($drinkList as $drink)
+							@php
+							$drinkImg = URL:: asset('images').'/site/'.Helper::NO_IMAGE;
+							if (file_exists(public_path('/uploads/drink/thumbs/'.$drink->image))) {
+								$drinkImg = URL::to('/').'/uploads/drink/thumbs/'.$drink->image;
+							}
+							@endphp
+							<li>
+								<a href="javascript: void(0);" class="add_to_basket" data-productid="" data-prodid="" data-showingredients="" data-attributeid="" data-hasattribute="" data-drinkid="{{Helper::customEncryptionDecryption($drink->id)}}" data-specialid="">
+									<div class="tt_fleft">
+										<figure><img src="{{$drinkImg}}" alt=""></figure>
+										{{$drink->local[0]->local_title}}
+									</div>
+									<div class="tt_fright"><span class="blue">CHF {{Helper::formatToTwoDecimalPlaces($drink->price)}} <i class="plus">+</i></span></div>
+								</a>
+							</li>
+						@endforeach
+						</ul>
+					</div>
+					{{-- Drinks section --}}
+				@endif
+
+				@if ($specialMenuList->count() > 0)
+					{{-- Special Menu section --}}
+					<div class="order_box">
+						<h2 class="subheading">@lang('custom.text_special_menu')</h2>
+						<ul class="price_list special_menu">
+						@foreach ($specialMenuList as $menu)
+							@php
+							$menuImg = URL:: asset('images').'/site/'.Helper::NO_IMAGE;
+							if (file_exists(public_path('/uploads/special_menu/thumbs/'.$menu->image))) {
+								$menuImg = URL::to('/').'/uploads/special_menu/thumbs/'.$menu->image;
+							}
+							@endphp
+							<li>
+								<a href="javascript: void(0);" class="add_to_basket" data-productid="" data-prodid="" data-showingredients="" data-attributeid="" data-hasattribute="" data-drinkid="" data-specialid="{{Helper::customEncryptionDecryption($menu->id)}}">
+									<div class="tt_fleft">
+										<figure><img src="{{$menuImg}}" alt=""></figure>
+									</div>
+									<div class="tt_fright">
+										<span>{{$menu->local[0]->local_title}}</span>
+										<span class="blue">CHF {{Helper::formatToTwoDecimalPlaces($menu->price)}} <i class="plus">+</i></span>
+									</div>
+								</a>
+							</li>
+							{{--<li>
+								<a href="javascript: void(0);" class="add_to_basket" data-productid="" data-prodid="" data-showingredients="" data-attributeid="" data-hasattribute="" data-drinkid="" data-specialid="{{Helper::customEncryptionDecryption($menu->id)}}">
+									<div class="tt_fleft">
+										<figure><img src="{{$menuImg}}" alt=""></figure>
+										{{$menu->local[0]->local_title}}
+									</div>
+									<div class="tt_fright"><span class="blue">CHF {{Helper::formatToTwoDecimalPlaces($menu->price)}} <i class="plus">+</i></span></div>
+								</a>
+							</li>--}}
+						@endforeach
+						</ul>
+					</div>
+					{{-- Special Menu section --}}
+				@endif
+				
+				</aside>
+			@else
+				<p>&nbsp;</p>
+			@endif
+			</div>
+		</section>
+
+		@include('site.elements.popups')
+
+	@endsection

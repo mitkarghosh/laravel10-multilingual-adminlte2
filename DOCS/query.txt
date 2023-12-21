@@ -1,0 +1,1 @@
+ALTER TABLE `sb_site_settings` ADD `advertisement_banner_en` TEXT NOT NULL AFTER `mwst_number`, ADD `advertisement_banner_de` TEXT NOT NULL AFTER `advertisement_banner_en`;

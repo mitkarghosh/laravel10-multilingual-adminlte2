@@ -1,0 +1,29 @@
+/*label.error{color: #FF0000 !important; text-transform: none !important; font-weight: normal !important;}*/
+
+/* Loader */
+.loader{width: 60px; height: 60px; border-radius: 100%; position: relative; margin: 0 auto; }
+#loader-1:before, #loader-1:after{ content: ""; position: absolute; top: -10px; left: -10px; width: 100%; height: 100%; border-radius: 100%;
+     border: 5px solid transparent; border-top-color: #7c9615; }
+#loader-1:before{z-index: 100; animation: spin 1s infinite;}
+#loader-1:after{border: 5px solid #ccc;}  
+@keyframes spin{
+    0%{
+      -webkit-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+  
+    100%{
+      -webkit-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+}
+.whole-area{ position: fixed; /*background:rgba(255, 255, 255, 0.6);*/ background:rgba(0,0,0,0.6); top: 0; left: 0; width: 100%; height: 100%; z-index: 99999; display: flex; align-items: center; justify-content: center; overflow: hidden;}
+
+.swal2-actions [type="button"] { min-width: auto;}
+/* a.updateCartItem{display: block;} */
+.errorMessage{color: #FF0000 !important;}
+.successMessage{color: #38e500 !important;}

@@ -1,0 +1,15 @@
+
+.tticon-eye:before { content: '\0802'; } /* 'ࠂ' */
+.tticon-eye-off:before { content: '\0803'; } /* 'ࠃ' */
+.tticon-heart-empty:before { content: '\0804'; } /* 'ࠄ' */
+.tticon-heart:before { content: '\0805'; } /* 'ࠅ' */
+.tticon-angle-left:before { content: '\0806'; } /* 'ࠆ' */
+.tticon-angle-right:before { content: '\0807'; } /* 'ࠇ' */
+.tticon-angle-up:before { content: '\0808'; } /* 'ࠈ' */
+.tticon-angle-down:before { content: '\0809'; } /* 'ࠉ' */
+.tticon-check:before { content: '\0810'; } /* 'ࠐ' */
+.tticon-cancel:before { content: '\0811'; } /* 'ࠑ' */
+.tticon-plus:before { content: '\0812'; } /* 'ࠒ' */
+.tticon-minus:before { content: '\0813'; } /* 'ࠓ' */
+.tticon-cog:before { content: '\0814'; } /* 'ࠔ' */
+.tticon-attention-alt:before { content: '\0815'; } /* 'ࠕ' */
